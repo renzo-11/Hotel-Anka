@@ -17,7 +17,7 @@ export interface Client {
   providedIn: 'root',
 })
 export class ClientService {
-  private apiUrl = 'https://localhost:7004/api/Client'; // URL de tu API de clientes
+  private apiUrl = 'http://localhost:5157/api/Client'; // URL de tu API de clientes
 
   constructor(private http: HttpClient) {}
 

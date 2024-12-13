@@ -18,7 +18,7 @@ export interface Room {
   providedIn: 'root',
 })
 export class RoomService {
-  private apiUrl = 'https://localhost:7004/api/Rooms';
+  private apiUrl = 'http://localhost:5157/api/Rooms';
 
   constructor(private http: HttpClient) {}
 

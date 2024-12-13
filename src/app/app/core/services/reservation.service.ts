@@ -17,7 +17,7 @@ export interface Reservation {
   providedIn: 'root',
 })
 export class ReservationService {
-  private apiUrl = 'https://localhost:7004/api/Reservations';  // Tu URL de la API
+  private apiUrl = 'http://localhost:5157/api/Reservations';  // Tu URL de la API
 
   constructor(private http: HttpClient) {}
 
