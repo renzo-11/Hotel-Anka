@@ -1,0 +1,100 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: #333;
+  background-color: #fff;
+}
+
+.cliente-form-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cliente-form-container h2 {
+  font-size: 2rem;
+  color: #8B6B3D;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.cliente-form-container label {
+  display: block;
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.cliente-form-container input,
+.cliente-form-container select {
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.cliente-form-container .button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.cliente-form-container button {
+  padding: 1rem 2rem;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.cliente-form-container button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.cliente-form-container .save-btn {
+  background-color: #D4A86C;
+  color: white;
+}
+
+.cliente-form-container .save-btn:hover {
+  background-color: #8B6B3D;
+}
+
+.cliente-form-container .update-btn {
+  background-color: #f39c12;
+  color: white;
+}
+
+.cliente-form-container .update-btn:hover {
+  background-color: #e67e22;
+}
+
+.cliente-form-container .next-btn {
+  background-color: #27ae60;
+  color: white;
+}
+
+.cliente-form-container .next-btn:hover {
+  background-color: #2ecc71;
+}
+
+@media (max-width: 768px) {
+  .cliente-form-container {
+    padding: 1.5rem;
+  }
+
+  .cliente-form-container h2 {
+    font-size: 1.8rem;
+  }
+
+  .cliente-form-container button {
+    font-size: 1rem;
+    padding: 0.8rem 1.5rem;
+  }
+}

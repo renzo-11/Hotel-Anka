@@ -1,0 +1,60 @@
+<main class="container" *ngIf="roomDetails">
+  <!-- Galería de imágenes de la habitación -->
+  <div class="room-gallery">
+    <img [src]="roomDetails.imageUrl" alt="Habitación {{ roomDetails.roomType }}" class="main-image">
+  </div>
+
+  <div class="room-details">
+    <!-- Tarjeta de Reserva -->
+    <div class="booking-card">
+      <p class="price-label">Desde</p>
+      <p class="price">S/.{{ getPrice() }}</p>
+      <button class="reserve-btn">Reservar</button>
+    </div>
+
+    <div class="room-info">
+      <!-- Características de la habitación -->
+      <div class="features">
+        <div class="feature">
+          <span class="icon">👤</span>
+          <span>Capacidad: {{ roomDetails.capacity }}</span>
+        </div>
+        <div class="feature">
+          <span class="icon">🛏️</span>
+          <span>Tipo de cama: {{ roomDetails.roomType }}</span>
+        </div>
+      </div>
+
+      <!-- Descripción de la habitación -->
+      <p class="description">
+        {{ roomDetails.details }}
+      </p>
+    </div>
+  </div>
+  <div class="services">
+    <h2>Servicios y comodidades:</h2>
+    <div class="service-list">
+      <div class="service">
+        <span class="icon">📺</span>
+        <span>TV - 43 pulgadas</span>
+      </div>
+      <div class="service">
+        <span class="icon">📶</span>
+        <span>Wifi</span>
+      </div>
+      <div class="service">
+        <span class="icon">🚿</span>
+        <span>Baño privado</span>
+      </div>
+      <div class="service">
+        <span class="icon">🛁</span>
+        <span>Toallas</span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Mensaje si no hay detalles disponibles -->
+<div *ngIf="!roomDetails">
+  <p>No se encontraron detalles para esta habitación.</p>
+</div>

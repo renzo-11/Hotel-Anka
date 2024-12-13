@@ -1,0 +1,43 @@
+<main class="container">
+  <section class="room-selector">
+    <h2>ELIGE Y RESERVA</h2>
+    <p class="subtitle">LA MEJOR HABITACIÓN DE ACUERDO A TU COMODIDAD</p>
+
+    <!-- Filtros -->
+    <div class="filters">
+      <div class="filter-group">
+        <label for="tipo">Tipo</label>
+        <select id="tipo" name="tipo" [(ngModel)]="selectedRoomType" (change)="updatePrice()">
+          <option *ngFor="let room of rooms" [value]="room.roomType">{{ room.roomType }}</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="precio">Precio</label>
+        <input type="text" id="precio" name="precio" [value]="roomPrice" disabled>
+      </div>
+    </div>
+
+    <div class="room-list">
+      <article *ngFor="let room of rooms" class="room-card">
+        <div class="room-image">
+          <img [src]="room.imageUrl" alt="{{ room.roomType | titlecase }} Room">
+        </div>
+        <div class="room-info">
+          <h3>{{ room.roomType | titlecase }} Room</h3>
+          <div class="amenities">
+            <span class="amenity">WiFi</span>
+            <span class="amenity">TV</span>
+            <span class="amenity">Baño privado</span>
+          </div>
+          <p class="description">
+            {{ room.details }}
+          </p>
+          <div class="room-footer">
+            <div class="price">S/.{{ room.pricePerNight }}</div>
+            <button class="details-btn" (click)="gotoRoomDetail(room.roomId)">VER DETALLES</button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>

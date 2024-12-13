@@ -1,0 +1,40 @@
+/* Configura el contenedor principal de la página */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* Contenedor principal de la aplicación */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Asegura que el navbar siempre esté en la parte superior */
+app-navbar {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+}
+
+/* Asegura que el contenido principal se ajuste correctamente */
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Asegura que el footer esté siempre al final */
+app-footer {
+  margin-top: auto;
+  width: 100%;
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 10px;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

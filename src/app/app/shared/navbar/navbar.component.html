@@ -1,0 +1,20 @@
+<nav class="navbar">
+  <div class="container">
+    <div class="logo">
+      <img src="https://i.ibb.co/MnCHkb1/8ee1b8429840d07a318856bfea75af9c.png" alt="Logo" class="logo-img" />
+    </div>
+    <button class="menu-toggle" (click)="toggleMenu()" (keydown)="onKeyDown($event)">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+    <ul class="nav-links" [ngClass]="{'active': menuActive}">
+      <li><a (click)="navigateToHome()">Home</a></li>
+      <li><a (click)="navigateToAbout()">About</a></li>
+      <li><a (click)="navigateToRooms()">Rooms</a></li>
+      <li><a (click)="navigateToReservation()">Reservation</a></li>
+      <li><a (click)="navigateToPayment()">Payment</a></li>
+      <li><a (click)="navigateToContact()">Contact</a></li>
+    </ul>
+  </div>
+</nav>
