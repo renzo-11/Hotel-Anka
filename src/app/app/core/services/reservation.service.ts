@@ -17,7 +17,7 @@ export interface Reservation {
   providedIn: 'root',
 })
 export class ReservationService {
-  private apiUrl = 'https://localhost:7004/api/Reservations';  // Tu URL de la API
+  private apiUrl = 'https://localhost:7004/api/Reservations';
 
   constructor(private http: HttpClient) {}
 
@@ -28,16 +28,28 @@ export class ReservationService {
 
   // Crear una nueva reservación
   createReservation(reservation: Reservation): Observable<Reservation> {
-    return this.http.post<Reservation>(this.apiUrl, reservation);
+    const body = {
+      clientId: reservation.clientId, // Enviar 'clientId'
+      roomId: reservation.roomId,     // Enviar 'roomId'
+      reservationDate: reservation.reservationDate, // Enviar 'reservationDate'
+      checkInDate: reservation.checkInDate, // Enviar 'checkInDate'
+      checkInTime: reservation.checkInTime, // Enviar 'checkInTime'
+      checkOutTime: reservation.checkOutTime, // Enviar 'checkOutTime'
+      totalAmount: reservation.totalAmount, // Enviar 'totalAmount'
+      reservationStatus: reservation.reservationStatus, // Enviar 'reservationStatus'
+    };
+
+    return this.http.post<Reservation>(this.apiUrl, body);
   }
 
   // Obtener reservaciones por cuarto y fecha
   getReservationsForRoomAndDate(roomId: number, date: string): Observable<Reservation[]> {
-    return this.http.get<Reservation[]>(`${this.apiUrl}/room/${roomId}/date/${date}`);
+    const url = `${this.apiUrl}/room/${roomId}/date/${date}`;
+    return this.http.get<Reservation[]>(url);
   }
 
-  // Obtener horas disponibles para un cuarto y una fecha de check-in
   getAvailableTimes(roomId: number, checkInDate: string): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiUrl}/available-times/${roomId}/${checkInDate}`);
+    const url = `${this.apiUrl}/available-times/${roomId}/${checkInDate}`;
+    return this.http.get<string[]>(url);
   }
 }

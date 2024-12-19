@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class ClienteFormComponent {
   client: Client = {
+    clientId: 0,
     firstName: '',
     lastName: '',
     nacionality: '',
@@ -48,9 +49,12 @@ export class ClienteFormComponent {
     }
   }
 
-  // Guardar cliente con advertencia
+  // Guardar cliente sin enviar el clientId
   saveClient(): void {
-    this.clientService.addClient(this.client).subscribe({
+    // Eliminamos clientId antes de enviar al backend, ya que se autogenera
+    const { clientId, ...clientToSave } = this.client;
+
+    this.clientService.addClient(clientToSave).subscribe({
       next: () => {
         alert('Datos guardados. Por favor, revisa si los datos son correctos.');
       },

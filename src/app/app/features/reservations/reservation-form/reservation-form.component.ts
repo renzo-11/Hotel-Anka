@@ -1,9 +1,10 @@
+// reservation-form.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ClientService, Client } from '../../../core/services/client.service';
 import { RoomService, Room } from '../../../core/services/room.service';
 import { ReservationService, Reservation } from '../../../core/services/reservation.service';
 import { Router } from '@angular/router';
-import { format, addHours } from 'date-fns';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'app-reservation-form',
@@ -24,17 +25,9 @@ export class ReservationFormComponent implements OnInit {
     reservationStatus: 'Pending',
   };
 
-  availableCheckInTimes: string[] = [];
   availableTimes: string[] = [];
   maxCheckInDate: string = '';
   minCheckInDate: string = this.getLocalDate();
-
-  allTimes: string[] = [
-    '00:00', '01:00', '02:00', '03:00', '04:00', '05:00',
-    '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
-    '12:00', '13:00', '14:00', '15:00', '16:00', '17:00',
-    '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'
-  ];
 
   constructor(
     private clientService: ClientService,
@@ -80,16 +73,22 @@ export class ReservationFormComponent implements OnInit {
       return;
     }
 
+    const formattedDate = format(new Date(this.reservation.checkInDate), 'yyyy-MM-dd');
+    const url = `https://localhost:7004/api/Reservations/available-times/${this.reservation.roomId}/${formattedDate}`;
+
     this.reservationService.getAvailableTimes(this.reservation.roomId, this.reservation.checkInDate)
-      .subscribe((availableTimes: string[]) => {
-        this.availableTimes = availableTimes;
-        console.log('Horas disponibles:', this.availableTimes); // Verifica las horas disponibles
-      });
+      .subscribe(
+        (availableTimes) => {
+          this.availableTimes = availableTimes;
+        },
+        (error) => {
+          console.error('Error fetching available times:', error);
+        }
+      );
   }
 
   selectCheckInTime(time: string): void {
     this.reservation.checkInTime = time;
-    console.log('Hora de check-in seleccionada:', time); // Verifica la hora seleccionada
     this.onCheckInTimeChange();
   }
 
@@ -99,14 +98,34 @@ export class ReservationFormComponent implements OnInit {
       const checkInDateTime = new Date();
       checkInDateTime.setHours(hours, minutes);
 
-      const checkOutDateTime = addHours(checkInDateTime, 5);
+      const checkOutDateTime = new Date(checkInDateTime);
+      checkOutDateTime.setHours(checkInDateTime.getHours() + 5);
       this.reservation.checkOutTime = format(checkOutDateTime, 'HH:mm');
     }
   }
 
   submitForm(): void {
     this.reservation.reservationDate = this.getLocalDate();
-    this.reservationService.createReservation(this.reservation).subscribe({
+
+    // Asegúrate de que checkInTime y checkOutTime estén en el formato correcto
+    const formattedCheckInTime = this.formatTime(this.reservation.checkInTime);
+    const formattedCheckOutTime = this.formatTime(this.reservation.checkOutTime);
+
+    const reservationData: Reservation = {
+      clientId: Number(this.reservation.clientId), // Asegúrate de que el ID sea numérico
+      roomId: Number(this.reservation.roomId),     // Asegúrate de que el ID sea numérico
+      reservationDate: this.reservation.reservationDate,
+      checkInDate: this.reservation.checkInDate,
+      checkInTime: formattedCheckInTime,
+      checkOutTime: formattedCheckOutTime,
+      totalAmount: this.reservation.totalAmount,
+      reservationStatus: this.reservation.reservationStatus,
+    };
+
+    // Verifica los datos antes de enviarlos
+    console.log('Datos de la reserva a enviar:', reservationData);
+
+    this.reservationService.createReservation(reservationData).subscribe({
       next: () => {
         alert('¡Reserva guardada exitosamente!');
         this.router.navigate(['/reservations']);
@@ -117,4 +136,16 @@ export class ReservationFormComponent implements OnInit {
       },
     });
   }
+
+  formatTime(time: string): string {
+    // Asegura que la hora esté en el formato "HH:mm:ss"
+    const timeParts = time.split(':');
+    if (timeParts.length === 2) {
+      return `${timeParts[0]}:${timeParts[1]}:00`; // Añadir los segundos si no están presentes
+    }
+    return time; // Si ya tiene el formato adecuado, retorna como está
+  }
+
+
+
 }

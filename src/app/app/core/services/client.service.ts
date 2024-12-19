@@ -17,7 +17,7 @@ export interface Client {
   providedIn: 'root',
 })
 export class ClientService {
-  private apiUrl = 'https://localhost:7004/api/Client'; // URL de tu API de clientes
+  private apiUrl = 'https://localhost:7004/api/Client'; 
 
   constructor(private http: HttpClient) {}
 
@@ -31,4 +31,9 @@ export class ClientService {
     const { clientId, ...clientWithoutId } = client;
     return this.http.post<Client>(this.apiUrl, clientWithoutId);
   }
+
+  getClientById(clientId: number): Observable<Client> {
+    return this.http.get<Client>(`${this.apiUrl}/${clientId}`);
+  }
+  
 }

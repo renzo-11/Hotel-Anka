@@ -1,3 +1,4 @@
+<!-- reservation-form.component.html -->
 <div class="reservation-form-container">
   <h2>Formulario de Reservación</h2>
   <form (ngSubmit)="submitForm()" #reservationForm="ngForm">
@@ -32,12 +33,9 @@
 
     <!-- Fecha de Check-In -->
     <div class="form-group">
-      <mat-form-field appearance="fill">
-        <mat-label>Fecha de Check-In</mat-label>
-        <input matInput [matDatepicker]="checkInDatePicker" [(ngModel)]="reservation.checkInDate" name="checkInDate" [min]="minCheckInDate" [max]="maxCheckInDate" (dateChange)="loadAvailableTimes()" required />
-        <mat-datepicker-toggle matSuffix [for]="checkInDatePicker"></mat-datepicker-toggle>
-        <mat-datepicker #checkInDatePicker></mat-datepicker>
-      </mat-form-field>
+      <label for="checkInDate">Fecha de Check-In</label>
+      <input type="date" id="checkInDate" [(ngModel)]="reservation.checkInDate" name="checkInDate"
+        [min]="minCheckInDate" [max]="maxCheckInDate" (change)="loadAvailableTimes()" required />
     </div>
 
     <!-- Hora de Check-In (Horas Disponibles) -->
