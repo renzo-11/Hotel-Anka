@@ -1,26 +1,25 @@
 <!-- reservation-form.component.html -->
 <div class="reservation-form-container">
-  <h2>Formulario de Reservación</h2>
+  <div class="header">
+    <h2>Formulario de Reservación</h2>
+    <span class="current-date">{{ currentDate | date: 'dd/MM/yyyy' }}</span> <!-- Fecha actual -->
+  </div>
+
   <form (ngSubmit)="submitForm()" #reservationForm="ngForm">
-
-    <!-- Fecha de Reserva (Automática y No Editable) -->
-    <div class="form-group">
-      <mat-form-field appearance="fill">
-        <mat-label>Fecha de Reserva</mat-label>
-        <input matInput [(ngModel)]="reservation.reservationDate" name="reservationDate" readonly />
-      </mat-form-field>
-    </div>
-
+    
     <!-- Selección de Cliente -->
     <div class="form-group">
       <label for="clientId">Cliente:</label>
-      <select id="clientId" [(ngModel)]="reservation.clientId" name="clientId" required>
-        <option *ngFor="let client of clients" [value]="client.clientId">
-          {{ client.firstName }} {{ client.lastName }}
-        </option>
-      </select>
+      <div class="client-selection">
+        <select id="clientId" [(ngModel)]="reservation.clientId" name="clientId" required>
+          <option *ngFor="let client of clients" [value]="client.clientId">
+            {{ client.firstName }} {{ client.lastName }}
+          </option>
+        </select>
+        <button type="button" class="btn-small" (click)="openNewUserForm()">Soy nuevo cliente</button>
+      </div>
     </div>
-
+    
     <!-- Selección de Cuarto -->
     <div class="form-group">
       <label for="roomId">Cuarto:</label>
@@ -60,9 +59,9 @@
       <input type="number" id="totalAmount" [(ngModel)]="reservation.totalAmount" name="totalAmount" required />
     </div>
 
-    <!-- Botón de Enviar -->
+    <!-- Botón de Reservar -->
     <div class="button-container">
-      <button type="submit" [disabled]="!reservationForm.valid">Guardar</button>
+      <button type="submit" [disabled]="!reservationForm.valid">Reservar</button>
     </div>
   </form>
 </div>

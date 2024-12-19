@@ -12,6 +12,9 @@ import { format } from 'date-fns';
   styleUrls: ['./reservation-form.component.scss'],
 })
 export class ReservationFormComponent implements OnInit {
+  // Agregar la propiedad currentDate para mostrar la fecha actual
+  currentDate: Date = new Date();
+
   clients: Client[] = [];
   rooms: Room[] = [];
   reservation: Reservation = {
@@ -35,6 +38,10 @@ export class ReservationFormComponent implements OnInit {
     private reservationService: ReservationService,
     private router: Router
   ) {}
+
+  openNewUserForm() {
+    this.router.navigate(['/client']);
+  }
 
   ngOnInit(): void {
     this.loadClients();
