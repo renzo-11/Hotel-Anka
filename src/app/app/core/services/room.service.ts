@@ -18,11 +18,17 @@ export interface Room {
   providedIn: 'root',
 })
 export class RoomService {
-  private apiUrl = 'http://localhost:5157/api/Rooms';
+  private apiUrl = 'http://localhost:5157/api/Room';
 
   constructor(private http: HttpClient) {}
 
   getRooms(): Observable<Room[]> {
     return this.http.get<Room[]>(this.apiUrl);
   }
+
+  getRoomsbyId(roomId: number): Observable<Room> {
+    return this.http.get<Room>(`${this.apiUrl}/${roomId}`);
+  }
+  
+  
 }

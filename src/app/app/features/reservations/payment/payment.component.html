@@ -1,1 +1,24 @@
-<p>payment works!</p>
+<div class="payment-container" *ngIf="!loading">
+  <h2>Pago de Reserva</h2>
+
+  <div class="receipt">
+    <h3>Boleta Electrónica</h3>
+    <p><strong>Número de Reserva:</strong> {{ reservation.reservationId }}</p>
+    <p><strong>Cliente:</strong> {{ client.firstName }} {{ client.lastName }}</p>
+    <p><strong>Tipo de Documento:</strong> {{ client.documentType }}</p>
+    <p><strong>Número de Documento:</strong> {{ client.documentNumber }}</p>
+    <p><strong>Email:</strong> {{ client.email }}</p>
+    <p><strong>Teléfono:</strong> {{ client.phone }}</p>
+    <p><strong>Habitación:</strong> {{ room.roomNumber }}</p>
+    <p><strong>Precio por noche:</strong> S/.{{ room.pricePerNight }}</p>
+    <p><strong>Fecha de Reserva:</strong> {{ reservation.reservationDate | date:'dd/MM/yyyy' }}</p>
+    <p><strong>Check-In:</strong> {{ reservation.checkInDate | date:'dd/MM/yyyy' }} - 12:00 PM</p>
+    <p><strong>Check-Out:</strong> {{ reservation.checkOutDate | date:'dd/MM/yyyy' }} - 12:00 PM</p>
+    <p><strong>Total a Pagar:</strong> S/.{{ reservation.totalAmount }}</p>
+  </div>
+
+  <div class="payment-buttons">
+    <button (click)="payWithCard()">Pagar con Tarjeta</button>
+    <button (click)="payWithPayPal()">Pagar con PayPal</button>
+  </div>
+</div>

@@ -1,4 +1,3 @@
-// reservation-form.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ClientService, Client } from '../../../core/services/client.service';
 import { RoomService, Room } from '../../../core/services/room.service';
@@ -12,25 +11,24 @@ import { format } from 'date-fns';
   styleUrls: ['./reservation-form.component.scss'],
 })
 export class ReservationFormComponent implements OnInit {
-  // Agregar la propiedad currentDate para mostrar la fecha actual
   currentDate: Date = new Date();
-
-  clients: Client[] = [];
   rooms: Room[] = [];
-  reservation: Reservation = {
-    clientId: 0,
-    roomId: 0,
-    reservationDate: this.getLocalDate(),
-    checkInDate: '',
-    checkInTime: '',
-    checkOutTime: '',
-    totalAmount: 0,
-    reservationStatus: 'Pending',
-  };
-
-  availableTimes: string[] = [];
+  client: Client | null = null;
   maxCheckInDate: string = '';
   minCheckInDate: string = this.getLocalDate();
+
+  reservation: Reservation = {
+    reservationId: 0,
+    clientId: 0,
+    roomId: 0,
+    reservationDate: new Date(),
+    checkInDate: new Date(),
+    checkOutDate: new Date(),
+    checkInTime: '12:00:00',
+    checkOutTime: '12:00:00',
+    totalAmount: 0,
+    reservationStatus: 'Pendiente'
+  };
 
   constructor(
     private clientService: ClientService,
@@ -39,19 +37,20 @@ export class ReservationFormComponent implements OnInit {
     private router: Router
   ) {}
 
-  openNewUserForm() {
-    this.router.navigate(['/client']);
-  }
-
   ngOnInit(): void {
-    this.loadClients();
+    this.loadLatestClient();
     this.loadRooms();
     this.setMaxCheckInDate();
   }
 
-  loadClients(): void {
+  loadLatestClient(): void {
     this.clientService.getClients().subscribe((clients: Client[]) => {
-      this.clients = clients;
+      if (clients.length > 0) {
+        this.client = clients[clients.length - 1]; 
+        if (this.client && this.client.clientId !== undefined) {
+          this.reservation.clientId = this.client.clientId;
+        }
+      }
     });
   }
 
@@ -68,74 +67,20 @@ export class ReservationFormComponent implements OnInit {
   }
 
   setMaxCheckInDate(): void {
-    const currentDate = new Date();
     const maxDate = new Date();
-    maxDate.setDate(currentDate.getDate() + 3);
+    maxDate.setDate(new Date().getDate() + 3);
     this.maxCheckInDate = format(maxDate, 'yyyy-MM-dd');
   }
 
-  loadAvailableTimes(): void {
-    if (!this.reservation.roomId || !this.reservation.checkInDate) {
-      this.availableTimes = [];
-      return;
-    }
-
-    const formattedDate = format(new Date(this.reservation.checkInDate), 'yyyy-MM-dd');
-    const url = `https://localhost:7004/api/Reservations/available-times/${this.reservation.roomId}/${formattedDate}`;
-
-    this.reservationService.getAvailableTimes(this.reservation.roomId, this.reservation.checkInDate)
-      .subscribe(
-        (availableTimes) => {
-          this.availableTimes = availableTimes;
-        },
-        (error) => {
-          console.error('Error fetching available times:', error);
-        }
-      );
-  }
-
-  selectCheckInTime(time: string): void {
-    this.reservation.checkInTime = time;
-    this.onCheckInTimeChange();
-  }
-
-  onCheckInTimeChange(): void {
-    if (this.reservation.checkInTime) {
-      const [hours, minutes] = this.reservation.checkInTime.split(':').map(Number);
-      const checkInDateTime = new Date();
-      checkInDateTime.setHours(hours, minutes);
-
-      const checkOutDateTime = new Date(checkInDateTime);
-      checkOutDateTime.setHours(checkInDateTime.getHours() + 5);
-      this.reservation.checkOutTime = format(checkOutDateTime, 'HH:mm');
-    }
-  }
-
   submitForm(): void {
-    this.reservation.reservationDate = this.getLocalDate();
-
-    // Asegúrate de que checkInTime y checkOutTime estén en el formato correcto
-    const formattedCheckInTime = this.formatTime(this.reservation.checkInTime);
-    const formattedCheckOutTime = this.formatTime(this.reservation.checkOutTime);
-
-    const reservationData: Reservation = {
-      clientId: Number(this.reservation.clientId), // Asegúrate de que el ID sea numérico
-      roomId: Number(this.reservation.roomId),     // Asegúrate de que el ID sea numérico
-      reservationDate: this.reservation.reservationDate,
-      checkInDate: this.reservation.checkInDate,
-      checkInTime: formattedCheckInTime,
-      checkOutTime: formattedCheckOutTime,
-      totalAmount: this.reservation.totalAmount,
-      reservationStatus: this.reservation.reservationStatus,
-    };
-
-    // Verifica los datos antes de enviarlos
-    console.log('Datos de la reserva a enviar:', reservationData);
-
-    this.reservationService.createReservation(reservationData).subscribe({
-      next: () => {
+    this.reservation.reservationDate = new Date();
+    this.reservation.checkInTime = '12:00:00';
+    this.reservation.checkOutTime = '12:00:00';
+  
+    this.reservationService.createReservation(this.reservation).subscribe({
+      next: (newReservation: Reservation) => { 
         alert('¡Reserva guardada exitosamente!');
-        this.router.navigate(['/reservations']);
+        this.router.navigate(['/payment', newReservation.reservationId]); 
       },
       error: (err) => {
         console.error('Error al guardar la reserva:', err);
@@ -143,16 +88,9 @@ export class ReservationFormComponent implements OnInit {
       },
     });
   }
+  
 
-  formatTime(time: string): string {
-    // Asegura que la hora esté en el formato "HH:mm:ss"
-    const timeParts = time.split(':');
-    if (timeParts.length === 2) {
-      return `${timeParts[0]}:${timeParts[1]}:00`; // Añadir los segundos si no están presentes
-    }
-    return time; // Si ya tiene el formato adecuado, retorna como está
+  navigateToClientForm(): void {
+    this.router.navigate(['/client']);
   }
-
-
-
 }

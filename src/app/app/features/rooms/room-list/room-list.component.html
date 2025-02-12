@@ -7,18 +7,16 @@
     <div class="filters">
       <div class="filter-group">
         <label for="tipo">Tipo</label>
-        <select id="tipo" name="tipo" [(ngModel)]="selectedRoomType" (change)="updatePrice()">
-          <option *ngFor="let room of rooms" [value]="room.roomType">{{ room.roomType }}</option>
+        <select id="tipo" name="tipo" [(ngModel)]="selectedRoomType" (change)="onRoomTypeChange()">
+          <option *ngFor="let room of rooms" [value]="room.roomType">
+            {{ room.roomType }}
+          </option>
         </select>
-      </div>
-      <div class="filter-group">
-        <label for="precio">Precio</label>
-        <input type="text" id="precio" name="precio" [value]="roomPrice" disabled>
       </div>
     </div>
 
     <div class="room-list">
-      <article *ngFor="let room of rooms" class="room-card">
+      <article *ngFor="let room of filteredRooms" class="room-card">
         <div class="room-image">
           <img [src]="room.imageUrl" alt="{{ room.roomType | titlecase }} Room">
         </div>
@@ -29,9 +27,7 @@
             <span class="amenity">TV</span>
             <span class="amenity">Baño privado</span>
           </div>
-          <p class="description">
-            {{ room.details }}
-          </p>
+          <p class="description">{{ room.details }}</p>
           <div class="room-footer">
             <div class="price">S/.{{ room.pricePerNight }}</div>
             <button class="details-btn" (click)="gotoRoomDetail(room.roomId)">VER DETALLES</button>

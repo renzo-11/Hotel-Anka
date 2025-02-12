@@ -3,12 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Reservation {
+  reservationId: number;
   clientId: number;
   roomId: number;
-  reservationDate: string;
-  checkInDate: string;
-  checkInTime: string;
-  checkOutTime: string;
+  reservationDate: Date;
+  checkInDate: Date;
+  checkOutDate: Date;
+  checkInTime: string | null; 
+  checkOutTime: string  | null; 
   totalAmount: number;
   reservationStatus: string;
 }
@@ -17,7 +19,7 @@ export interface Reservation {
   providedIn: 'root',
 })
 export class ReservationService {
-  private apiUrl = 'https://localhost:7004/api/Reservations';
+  private apiUrl = 'http://localhost:5157/api/Reservation';
 
   constructor(private http: HttpClient) {}
 
@@ -25,31 +27,19 @@ export class ReservationService {
   getReservations(): Observable<Reservation[]> {
     return this.http.get<Reservation[]>(this.apiUrl);
   }
+  
+  // Obtener una reservación por ID
+  getReservationById(reservationId: number): Observable<Reservation> {
+    return this.http.get<Reservation>(`${this.apiUrl}/${reservationId}`);
+  }
 
   // Crear una nueva reservación
   createReservation(reservation: Reservation): Observable<Reservation> {
-    const body = {
-      clientId: reservation.clientId, // Enviar 'clientId'
-      roomId: reservation.roomId,     // Enviar 'roomId'
-      reservationDate: reservation.reservationDate, // Enviar 'reservationDate'
-      checkInDate: reservation.checkInDate, // Enviar 'checkInDate'
-      checkInTime: reservation.checkInTime, // Enviar 'checkInTime'
-      checkOutTime: reservation.checkOutTime, // Enviar 'checkOutTime'
-      totalAmount: reservation.totalAmount, // Enviar 'totalAmount'
-      reservationStatus: reservation.reservationStatus, // Enviar 'reservationStatus'
-    };
-
-    return this.http.post<Reservation>(this.apiUrl, body);
+    return this.http.post<Reservation>(this.apiUrl, reservation);
   }
 
-  // Obtener reservaciones por cuarto y fecha
-  getReservationsForRoomAndDate(roomId: number, date: string): Observable<Reservation[]> {
-    const url = `${this.apiUrl}/room/${roomId}/date/${date}`;
-    return this.http.get<Reservation[]>(url);
+  deleteReservation(reservationId: number): Observable<Reservation> {
+    return this.http.delete<Reservation>(`${this.apiUrl}/${reservationId}`);
   }
 
-  getAvailableTimes(roomId: number, checkInDate: string): Observable<string[]> {
-    const url = `${this.apiUrl}/available-times/${roomId}/${checkInDate}`;
-    return this.http.get<string[]>(url);
-  }
 }

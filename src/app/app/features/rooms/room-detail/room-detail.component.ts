@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RoomService, Room } from '../../../core/services/room.service';
+import { query } from '@angular/animations';
+
 
 @Component({
   selector: 'app-room-detail',
@@ -11,7 +13,7 @@ export class RoomDetailComponent implements OnInit {
   roomId?: number;  // Cambiado de roomType a roomId
   roomDetails: Room | null = null;
 
-  constructor(private route: ActivatedRoute, private roomService: RoomService) {}
+  constructor(private route: ActivatedRoute, private roomService: RoomService, private router: Router) {}
 
   ngOnInit(): void {
     // Obtenemos el roomId desde la URL
@@ -29,6 +31,12 @@ export class RoomDetailComponent implements OnInit {
   getPrice(): number {
     // Retornamos el precio solo si los detalles de la habitación están disponibles
     return this.roomDetails ? this.roomDetails.pricePerNight : 0;
+  }
+  gotoreservation(): void {
+
+    this.router.navigate(['/reservation'],{
+      queryParams: {roomId: this.roomId},
+    });
   }
 }
 

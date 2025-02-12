@@ -1,0 +1,23 @@
+.payment-container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .paypal-button, .yape-button {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    color: white;
+    border-radius: 5px;
+  }
+  
+  .paypal-button {
+    background-color: #0070ba;
+  }
+  
+  .yape-button {
+    background-color: #6a1b9a;
+  }
+  

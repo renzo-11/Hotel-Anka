@@ -10,11 +10,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PaymentComponent } from './payment/payment.component';
 
 @NgModule({
   declarations: [
     ClienteFormComponent,
-    ReservationFormComponent
+    ReservationFormComponent,
+    PaymentComponent
   ],
   imports: [
     CommonModule,

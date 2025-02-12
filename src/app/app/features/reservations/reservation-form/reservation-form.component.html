@@ -1,56 +1,45 @@
-<!-- reservation-form.component.html -->
 <div class="reservation-form-container">
   <div class="header">
     <h2>Formulario de Reservación</h2>
-    <span class="current-date">{{ currentDate | date: 'dd/MM/yyyy' }}</span> <!-- Fecha actual -->
+    <span class="current-date">{{ currentDate | date: 'dd/MM/yyyy' }}</span>
+  </div>
+
+  <!-- Botón para Crear Nuevo Cliente -->
+  <div class="new-client-section">
+    <button type="button" (click)="navigateToClientForm()">+ Nuevo Cliente</button>
   </div>
 
   <form (ngSubmit)="submitForm()" #reservationForm="ngForm">
     
-    <!-- Selección de Cliente -->
-    <div class="form-group">
-      <label for="clientId">Cliente:</label>
-      <div class="client-selection">
-        <select id="clientId" [(ngModel)]="reservation.clientId" name="clientId" required>
-          <option *ngFor="let client of clients" [value]="client.clientId">
-            {{ client.firstName }} {{ client.lastName }}
-          </option>
-        </select>
-        <button type="button" class="btn-small" (click)="openNewUserForm()">Soy nuevo cliente</button>
+    <!-- Información del Cliente (Solo si hay cliente seleccionado) -->
+    <div *ngIf="client">
+      <div class="form-group">
+        <label>Cliente:</label>
+        <input type="text" [value]="client.firstName + ' ' + client.lastName" disabled />
       </div>
     </div>
-    
+
     <!-- Selección de Cuarto -->
     <div class="form-group">
       <label for="roomId">Cuarto:</label>
-      <select id="roomId" [(ngModel)]="reservation.roomId" name="roomId" (change)="loadAvailableTimes()" required>
+      <select id="roomId" [(ngModel)]="reservation.roomId" name="roomId" required>
         <option *ngFor="let room of rooms" [value]="room.roomId">
           {{ room.roomNumber }}
         </option>
       </select>
     </div>
 
-    <!-- Fecha de Check-In -->
+    <!-- Fecha de Check-In (Siempre a las 12:00 PM) -->
     <div class="form-group">
-      <label for="checkInDate">Fecha de Check-In</label>
+      <label for="checkInDate">Fecha de Check-In (12:00 PM)</label>
       <input type="date" id="checkInDate" [(ngModel)]="reservation.checkInDate" name="checkInDate"
-        [min]="minCheckInDate" [max]="maxCheckInDate" (change)="loadAvailableTimes()" required />
+        [min]="minCheckInDate" [max]="maxCheckInDate" required />
     </div>
 
-    <!-- Hora de Check-In (Horas Disponibles) -->
+    <!-- Fecha de Check-Out (Siempre a las 12:00 PM) -->
     <div class="form-group">
-      <label>Hora de Check-In:</label>
-      <div class="time-grid">
-        <button *ngFor="let time of availableTimes" type="button" (click)="selectCheckInTime(time)" [class.selected]="time === reservation.checkInTime">
-          {{ time }}
-        </button>
-      </div>
-    </div>
-
-    <!-- Hora de Check-Out (Automática y Editable) -->
-    <div class="form-group">
-      <label for="checkOutTime">Hora de Check-Out:</label>
-      <input type="time" id="checkOutTime" [(ngModel)]="reservation.checkOutTime" name="checkOutTime" required />
+      <label for="checkOutDate">Fecha de Check-Out (12:00 PM)</label>
+      <input type="date" id="checkOutDate" [(ngModel)]="reservation.checkOutDate" name="checkOutDate" required />
     </div>
 
     <!-- Monto Total -->

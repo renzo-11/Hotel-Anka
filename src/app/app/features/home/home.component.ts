@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -6,6 +7,20 @@ import { Component } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  // Aquí puedes agregar propiedades y métodos necesarios para la vista
-  title = 'Bienvenidos a Yuraq Anka Web';  // Un ejemplo de título
+
+  title = 'Bienvenidos a Yuraq Anka Web';  
+
+  constructor(private router: Router) { }
+
+  gotoreservation(): void {
+    this.router.navigate(['/reservation'],{
+    });
+  }
+  gotorooms(): void {
+    this.router.navigate(['/rooms'],{
+    });
+  }
 }
+
+
+

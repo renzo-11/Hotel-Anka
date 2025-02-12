@@ -1,4 +1,3 @@
-// src/app/features/rooms/room-list/room-list.component.ts
 import { Component, OnInit } from '@angular/core';
 import { RoomService, Room } from '../../../core/services/room.service';
 import { Router } from '@angular/router';
@@ -10,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class RoomListComponent implements OnInit {
   rooms: Room[] = [];
+  filteredRooms: Room[] = [];
   selectedRoomType: string = '';
   roomPrice: number = 0;
 
@@ -22,7 +22,13 @@ export class RoomListComponent implements OnInit {
   fetchRooms(): void {
     this.roomService.getRooms().subscribe((data) => {
       this.rooms = data;
-      this.updatePrice();
+
+      // Si hay habitaciones, establecer el primer tipo como predeterminado
+      if (this.rooms.length > 0) {
+        this.selectedRoomType = this.rooms[0].roomType;
+        this.filterRooms();
+        this.updatePrice();
+      }
     });
   }
 
@@ -33,7 +39,19 @@ export class RoomListComponent implements OnInit {
     this.roomPrice = selectedRoom ? selectedRoom.pricePerNight : 0;
   }
 
-  gotoRoomDetail(rommId: number): void{
-    this.router.navigate(['/rooms',rommId]);
+  filterRooms(): void {
+    // Filtra las habitaciones basadas en el tipo seleccionado
+    this.filteredRooms = this.rooms.filter(
+      (room) => room.roomType.toLowerCase() === this.selectedRoomType.toLowerCase()
+    );
+  }
+
+  onRoomTypeChange(): void {
+    this.updatePrice();
+    this.filterRooms();
+  }
+
+  gotoRoomDetail(roomId: number): void {
+    this.router.navigate(['/rooms', roomId]);
   }
 }
