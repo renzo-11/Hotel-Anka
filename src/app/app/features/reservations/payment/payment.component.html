@@ -17,8 +17,6 @@
     <p><strong>Total a Pagar:</strong> S/.{{ reservation.totalAmount }}</p>
   </div>
 
-  <div class="payment-buttons">
-    <button (click)="payWithCard()">Pagar con Tarjeta</button>
-    <button (click)="payWithPayPal()">Pagar con PayPal</button>
-  </div>
+  <!-- 🔹 Aquí se renderizará el botón de PayPal -->
+  <div id="paypal-button-container"></div>
 </div>

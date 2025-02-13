@@ -1,0 +1,22 @@
+<div *ngIf="loading">Cargando...</div>
+
+<div *ngIf="!loading" class="receipt-container">
+  <h2>Recibo de Pago</h2>
+  <p><strong>Hotel:</strong> HOTEL YURAK ANKA</p>
+  <p><strong>Order PayPal ID:</strong> {{ payment.payPalOrderId }}</p>
+  <p><strong>Monto Pagado:</strong> {{ payment.amountPaid }} USD</p>
+  <p><strong>Reserva ID:</strong> {{ reservation.reservationId }}</p>
+  <p><strong>Check-in:</strong> {{ reservation.checkInDate }} - Check-out: {{ reservation.checkOutDate }}</p>
+  <p><strong>Hora Check-in:</strong> {{ reservation.checkInTime }} - Hora Check-out: {{ reservation.checkOutTime }}</p>
+  <p><strong>Número de Habitación:</strong> {{ room.roomNumber }}</p>
+  <p><strong>Cliente:</strong> {{ client.firstName }} {{ client.lastName }}</p>
+  <p><strong>Correo:</strong> {{ client.email }}</p>
+  <p><strong>Teléfono:</strong> {{ client.phone }}</p>
+  <p><strong>Tipo de Documento:</strong> {{ client.documentType }}</p>
+  <p><strong>Número de Documento:</strong> {{ client.documentNumber }}</p>
+
+  <div class="button-group">
+    <button (click)="printReceipt()">Imprimir Recibo</button>
+    <button (click)="downloadPDF()">Descargar PDF</button>
+  </div>
+</div>

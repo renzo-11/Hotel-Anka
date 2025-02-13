@@ -8,6 +8,8 @@ import { ReservationFormComponent } from './features/reservations/reservation-fo
 import { PaymentComponent } from './features/reservations/payment/payment.component';  // Corrige la ruta del import
 import { ContactComponent } from './features/contact/contact.component';  // Corrige la ruta del import
 import { ClienteFormComponent } from './features/reservations/cliente-form/cliente-form.component';
+import { ReceiptComponent } from './features/reservations/receipt/receipt.component';
+
 
 const routes: Routes = [
   { path: '', component: HomeComponent },  // Ruta de inicio
@@ -18,6 +20,7 @@ const routes: Routes = [
   { path: 'payment/:id', component: PaymentComponent },  // Ruta para pago
   { path: 'client', component: ClienteFormComponent}, // Ruta para Formulario Cliente
   { path: 'contact', component: ContactComponent },  // Ruta de contacto
+  { path: 'receipt/:id', component: ReceiptComponent },  // Ruta para el recibo
   { path: '**', redirectTo: '', pathMatch: 'full' }  // Ruta de fallback para redirigir a Home
 ];
 
