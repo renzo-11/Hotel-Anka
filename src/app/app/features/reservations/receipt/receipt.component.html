@@ -1,22 +1,65 @@
-<div *ngIf="loading">Cargando...</div>
+<div *ngIf="!loading; else loadingTemplate" class="container text-center mt-5">
+  <h1 class="mb-3">HOTEL YURAK ANKA</h1>
+  <p class="mb-4">AGRADECEMOS SU PREFERENCIA</p>
 
-<div *ngIf="!loading" class="receipt-container">
-  <h2>Recibo de Pago</h2>
-  <p><strong>Hotel:</strong> HOTEL YURAK ANKA</p>
-  <p><strong>Order PayPal ID:</strong> {{ payment.payPalOrderId }}</p>
-  <p><strong>Monto Pagado:</strong> {{ payment.amountPaid }} USD</p>
-  <p><strong>Reserva ID:</strong> {{ reservation.reservationId }}</p>
-  <p><strong>Check-in:</strong> {{ reservation.checkInDate }} - Check-out: {{ reservation.checkOutDate }}</p>
-  <p><strong>Hora Check-in:</strong> {{ reservation.checkInTime }} - Hora Check-out: {{ reservation.checkOutTime }}</p>
-  <p><strong>Número de Habitación:</strong> {{ room.roomNumber }}</p>
-  <p><strong>Cliente:</strong> {{ client.firstName }} {{ client.lastName }}</p>
-  <p><strong>Correo:</strong> {{ client.email }}</p>
-  <p><strong>Teléfono:</strong> {{ client.phone }}</p>
-  <p><strong>Tipo de Documento:</strong> {{ client.documentType }}</p>
-  <p><strong>Número de Documento:</strong> {{ client.documentNumber }}</p>
+  <table class="table table-bordered">
+    <tbody>
+      <tr>
+        <th scope="row">Order PayPal ID</th>
+        <td>{{ payment?.payPalOrderId }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Monto Pagado</th>
+        <td>{{ payment?.amountPaid }} USD</td>
+      </tr>
+      <tr>
+        <th scope="row">Reserva ID</th>
+        <td>{{ reservation?.reservationId }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Check-in</th>
+        <td>{{ reservation?.checkInDate }} - {{ reservation?.checkOutDate }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Hora Check-in</th>
+        <td>{{ reservation?.checkInTime }} - {{ reservation?.checkOutTime }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Número de Habitación</th>
+        <td>{{ room?.roomNumber }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Cliente</th>
+        <td>{{ client?.firstName }} {{ client?.lastName }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Correo</th>
+        <td>{{ client?.email }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Teléfono</th>
+        <td>{{ client?.phone }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Tipo de Documento</th>
+        <td>{{ client?.documentType }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Número de Documento</th>
+        <td>{{ client?.documentNumber }}</td>
+      </tr>
+    </tbody>
+  </table>
 
-  <div class="button-group">
-    <button (click)="printReceipt()">Imprimir Recibo</button>
-    <button (click)="downloadPDF()">Descargar PDF</button>
+  <div class="mt-4">
+    <button class="btn btn-primary me-2" (click)="printReceipt()">Imprimir</button>
+    <button class="btn btn-success me-2" (click)="downloadPDF()">Descargar PDF</button>
+    <button class="btn btn-secondary" (click)="goToHome()">Salir</button>
   </div>
 </div>
+
+<ng-template #loadingTemplate>
+  <div class="text-center mt-5">
+    <p>Cargando información...</p>
+  </div>
+</ng-template>

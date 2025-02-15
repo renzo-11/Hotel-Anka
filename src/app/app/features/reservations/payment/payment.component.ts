@@ -15,9 +15,9 @@ declare var paypal: any;
 })
 export class PaymentComponent implements OnInit, AfterViewInit {
   reservationId!: number;
-  reservation!: Reservation;
-  client!: Client;
-  room!: Room;
+  reservation?: Reservation;
+  client?: Client;
+  room?: Room;
   loading: boolean = true;
   payPalClientId: string = '';
 
@@ -32,10 +32,27 @@ export class PaymentComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.reservationId = Number(this.route.snapshot.paramMap.get('id'));
-    console.log("📌 Reservation ID:", this.reservationId);
-    this.loadReservationDetails();
-    this.loadPayPalClientId();
+    this.route.queryParams.subscribe(params => {
+      const reservationIdParam = params['reservationId'];
+
+      if (!reservationIdParam) {
+        console.error("❌ No se proporcionó una ID de reserva.");
+        this.router.navigate(['/']);
+        return;
+      }
+
+      this.reservationId = Number(reservationIdParam);
+      
+      if (isNaN(this.reservationId)) {
+        console.error("❌ ID de reserva inválida.");
+        this.router.navigate(['/']);
+        return;
+      }
+
+      console.log("📌 Reservation ID recibido:", this.reservationId);
+      this.loadReservationDetails();
+      this.loadPayPalClientId();
+    });
   }
 
   ngAfterViewInit(): void {
@@ -46,21 +63,26 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     }, 1000);
   }
 
-  loadReservationDetails(): void {
+  private loadReservationDetails(): void {
     this.reservationService.getReservationById(this.reservationId).subscribe({
-      next: (res: Reservation) => {
+      next: (res) => {
+        if (!res) {
+          console.error("❌ Reserva no encontrada.");
+          this.router.navigate(['/']);
+          return;
+        }
         this.reservation = res;
         console.log("📌 Reserva obtenida:", res);
         this.loadClientAndRoom(res.clientId, res.roomId);
       },
       error: (err) => {
         console.error("❌ Error obteniendo reserva:", err);
-        this.loading = false;
+        this.router.navigate(['/']);
       }
     });
   }
 
-  loadClientAndRoom(clientId: number, roomId: number): void {
+  private loadClientAndRoom(clientId: number, roomId: number): void {
     this.clientService.getClientById(clientId).subscribe({
       next: (client) => {
         this.client = client;
@@ -80,14 +102,14 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     });
   }
 
-  checkLoadingState(): void {
+  private checkLoadingState(): void {
     if (this.client && this.room && this.reservation) {
       this.loading = false;
       setTimeout(() => this.renderPayPalButton(), 500);
     }
   }
 
-  loadPayPalClientId(): void {
+  private loadPayPalClientId(): void {
     this.paymentService.getPayPalClientId().subscribe({
       next: (response) => {
         this.payPalClientId = response.clientId;
@@ -100,7 +122,7 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     });
   }
 
-  loadPayPalSDK(): void {
+  private loadPayPalSDK(): void {
     const script = document.createElement('script');
     script.id = 'paypal-sdk';
     script.src = `https://www.paypal.com/sdk/js?client-id=${this.payPalClientId}&currency=USD`;
@@ -108,76 +130,63 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     document.body.appendChild(script);
   }
 
-  renderPayPalButton(): void {
-    const container = document.getElementById('paypal-button-container');
-    if (!container || container.children.length > 0) return;
-  
+  private renderPayPalButton(): void {
     if (!this.reservation?.totalAmount) {
       console.error("❌ Error: No hay monto disponible para la reserva.");
       return;
     }
-  
+
+    const container = document.getElementById('paypal-button-container');
+    if (!container || container.children.length > 0) return;
+
     const amountInUSD = (this.reservation.totalAmount / 3.7).toFixed(2);
-  
     console.log(`💰 Monto en PEN: ${this.reservation.totalAmount} ➡️ Monto en USD: ${amountInUSD}`);
-  
+
     paypal.Buttons({
       createOrder: (data: any, actions: any) => {
         return actions.order.create({
           purchase_units: [{
-            amount: {
-              value: amountInUSD
-            }
+            amount: { value: amountInUSD }
           }]
         });
       },
       onApprove: (data: any, actions: any) => {
         return actions.order.capture().then((details: any) => {
-          console.log("✅ Pago aprobado:", details);
-          const paypalOrderId = details.id;
-          const payerEmail = details.payer.email_address;
-          const amountInPEN = this.reservation.totalAmount;
-          
-          const payment: Payment = {
+          console.log("✅ Pago aprobado en PayPal:", details);
+      
+          const paymentData: Payment = {
+            paymentId: 0,
             reservationId: this.reservationId,
-            amountPaid: amountInPEN,
+            amountPaid: this.reservation?.totalAmount || 0,
             currency: "PEN",
             paymentDate: new Date().toISOString(),
-            paymentMethod: 1,
-            paymentStatus: 1,
-            payPalOrderId: paypalOrderId,
+            paymentMethod: 2, // Suponiendo que 2 es PayPal
+            paymentStatus: 1, // Estado pagado
+            payPalOrderId: details.id,
             ismanualPayment: false
           };
-
-          this.paymentService.createPaypalPayment(payment).subscribe({
+      
+          this.paymentService.createPaypalPayment(paymentData).subscribe({
             next: (response) => {
-              console.log("✅ Pago registrado en PEN:", response);
-
-              const transaction: PaymentTransaction = {
-                paymentId: response.paymentId,
-                paymentMethod: 1,
-                amount: parseFloat(amountInUSD),
-                currency: "USD",
-                status: 1,
-                externalTransactionId: paypalOrderId,
-                payerEmail: payerEmail,
-                createAt: new Date().toISOString()
-              };
-
-              this.transactionpaymentService.createTransaction(transaction).subscribe({
-                next: (res) => {
-                  console.log("✅ Transacción en USD registrada:", res);
-                  this.router.navigate(['/receipt', response.paymentId]);
-                },
-                error: (err) => console.error("❌ Error registrando transacción:", err)
-              });
+              console.log("📌 Respuesta del backend:", response);
+              
+              // Verificar que response realmente contiene el paymentId
+              if (response && response.paymentId) {
+                this.router.navigate(['/receipt'], { queryParams: { paymentId: response.paymentId } });
+              } else {
+                console.error("❌ Error: No se recibió un paymentId válido.");
+              }
             },
-            error: (err) => console.error("❌ Error registrando pago:", err)
+            error: (err) => {
+              console.error("❌ Error registrando pago en backend:", err);
+            }
           });
-
-          alert(`Pago realizado con éxito por ${details.payer.name.given_name}`);
+          
         });
       }
+      
+      
+      
     }).render('#paypal-button-container');
   }
 }

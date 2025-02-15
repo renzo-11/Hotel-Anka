@@ -13,7 +13,7 @@ export class HomeComponent {
   constructor(private router: Router) { }
 
   gotoreservation(): void {
-    this.router.navigate(['/reservation'],{
+    this.router.navigate(['/client'],{
     });
   }
   gotorooms(): void {

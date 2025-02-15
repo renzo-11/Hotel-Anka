@@ -17,10 +17,10 @@ const routes: Routes = [
   { path: 'rooms', component: RoomListComponent },  // Ruta para listar habitaciones
   { path: 'rooms/:roomId', component: RoomDetailComponent },  // Ruta de detalle de habitación con parámetro de id
   { path: 'reservation', component: ReservationFormComponent },  // Ruta para formulario de reserva
-  { path: 'payment/:id', component: PaymentComponent },  // Ruta para pago
+  { path: 'payment', component: PaymentComponent },  // Ruta para pago
   { path: 'client', component: ClienteFormComponent}, // Ruta para Formulario Cliente
   { path: 'contact', component: ContactComponent },  // Ruta de contacto
-  { path: 'receipt/:id', component: ReceiptComponent },  // Ruta para el recibo
+  { path: 'receipt', component: ReceiptComponent },  // Ruta para el recibo
   { path: '**', redirectTo: '', pathMatch: 'full' }  // Ruta de fallback para redirigir a Home
 ];
 

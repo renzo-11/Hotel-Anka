@@ -35,7 +35,7 @@ export class NavbarComponent {
   }
 
   navigateToReservation() {
-    this.router.navigate(['/reservation']);
+    this.router.navigate(['/client']);
   }
 
   navigateToPayment() {

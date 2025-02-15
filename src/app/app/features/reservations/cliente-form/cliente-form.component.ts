@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { ClientService, Client } from '../../../core/services/client.service';
 import { Router } from '@angular/router';
 
@@ -8,8 +8,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./cliente-form.component.scss'],
 })
 export class ClienteFormComponent {
-  @Output() clientCreated = new EventEmitter<number>(); // Emitirá el clientId
-
   client: Client = {
     clientId: 0,
     firstName: '',
@@ -20,8 +18,6 @@ export class ClienteFormComponent {
     phone: '',
     email: '',
   };
-
-  documentPattern: string = '';
 
   constructor(private clientService: ClientService, private router: Router) {}
 
@@ -34,13 +30,15 @@ export class ClienteFormComponent {
 
     this.clientService.addClient(clientToSave).subscribe({
       next: (savedClient: Client) => {
-        alert('Datos guardados correctamente.');
-        this.clientCreated.emit(savedClient.clientId); // Emitimos el ID
+        if (savedClient && savedClient.clientId) {
+          this.router.navigate(['/reservation'], { 
+            queryParams: { clientId: savedClient.clientId }
+          });
+        }
       },
-      error: (err) => {
-        console.error('Error al guardar cliente:', err);
+      error: () => {
+        alert('Hubo un error al registrar el cliente.');
       },
     });
-    this.router.navigate(['/reservation']);
   }
 }

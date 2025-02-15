@@ -4,53 +4,58 @@
     <span class="current-date">{{ currentDate | date: 'dd/MM/yyyy' }}</span>
   </div>
 
-  <!-- Botón para Crear Nuevo Cliente -->
-  <div class="new-client-section">
-    <button type="button" (click)="navigateToClientForm()">+ Nuevo Cliente</button>
+  <div class="form-group">
+    <label for="client">Cliente:</label>
+    <div *ngIf="client">
+      <span>Nombre del Cliente: {{ client.firstName }} {{ client.lastName }}</span>
+    </div>
   </div>
 
   <form (ngSubmit)="submitForm()" #reservationForm="ngForm">
-    
-    <!-- Información del Cliente (Solo si hay cliente seleccionado) -->
-    <div *ngIf="client">
-      <div class="form-group">
-        <label>Cliente:</label>
-        <input type="text" [value]="client.firstName + ' ' + client.lastName" disabled />
+    <div class="form-group">
+      <label for="checkInDate">Fecha de Ingreso (12:00 PM)</label>
+      <input 
+        type="date" 
+        id="checkInDate" 
+        [(ngModel)]="reservation.checkInDate" 
+        name="checkInDate"
+        [min]="minCheckInDate" 
+        [max]="maxCheckInDate" 
+        required 
+        (change)="onCheckInDateChange()" />
+    </div>
+
+    <div class="form-group room-selection">
+      <label for="roomId">Cuarto:</label>
+      <div class="room-selector">
+        <button type="button" class="view-button" (click)="viewRooms()">Ver</button>
+        <select 
+          id="roomId" 
+          [(ngModel)]="reservation.roomId" 
+          name="roomId" 
+          required 
+          [disabled]="rooms.length === 0"
+          (change)="onRoomChange()">
+          <option *ngFor="let room of rooms" [value]="room.roomId">
+            {{ room.roomNumber }} - S/ {{ room.pricePerNight | number:'1.2-2' }} - {{ room.roomType }}
+          </option>
+        </select>
       </div>
     </div>
 
-    <!-- Selección de Cuarto -->
     <div class="form-group">
-      <label for="roomId">Cuarto:</label>
-      <select id="roomId" [(ngModel)]="reservation.roomId" name="roomId" required>
-        <option *ngFor="let room of rooms" [value]="room.roomId">
-          {{ room.roomNumber }}
-        </option>
-      </select>
+      <label for="totalAmount">Monto a Pagar:</label>
+      <input 
+        type="text" 
+        id="totalAmount" 
+        [value]="'S/ ' + (reservation.totalAmount | number:'1.2-2')" 
+        readonly />
     </div>
 
-    <!-- Fecha de Check-In (Siempre a las 12:00 PM) -->
-    <div class="form-group">
-      <label for="checkInDate">Fecha de Check-In (12:00 PM)</label>
-      <input type="date" id="checkInDate" [(ngModel)]="reservation.checkInDate" name="checkInDate"
-        [min]="minCheckInDate" [max]="maxCheckInDate" required />
-    </div>
-
-    <!-- Fecha de Check-Out (Siempre a las 12:00 PM) -->
-    <div class="form-group">
-      <label for="checkOutDate">Fecha de Check-Out (12:00 PM)</label>
-      <input type="date" id="checkOutDate" [(ngModel)]="reservation.checkOutDate" name="checkOutDate" required />
-    </div>
-
-    <!-- Monto Total -->
-    <div class="form-group">
-      <label for="totalAmount">Monto Total:</label>
-      <input type="number" id="totalAmount" [(ngModel)]="reservation.totalAmount" name="totalAmount" required />
-    </div>
-
-    <!-- Botón de Reservar -->
     <div class="button-container">
-      <button type="submit" [disabled]="!reservationForm.valid">Reservar</button>
+      <button type="submit">
+        Reservar
+      </button>
     </div>
   </form>
 </div>

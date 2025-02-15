@@ -1,112 +1,139 @@
-/* Estilos generales para el formulario de reservación */
 .reservation-form-container {
-  max-width: 900px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+  max-width: 650px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
 
-.reservation-form-container h2 {
-  font-size: 2rem;
-  color: #8B6B3D;
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 
-/* Estilos para las secciones del formulario */
-.form-group {
-  margin-bottom: 1.5rem;
-}
+    h2 {
+      color: #333;
+      margin: 0;
+    }
 
-.form-group label {
-  display: block;
-  font-size: 1rem;
-  color: #333;
-  margin-bottom: 0.5rem;
-}
-
-.mat-form-field, select, input[type="date"], input[type="time"], input[type="number"] {
-  width: 100%;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-
-input[readonly] {
-  background-color: #f5f5f5;
-  cursor: not-allowed;
-}
-
-button {
-  padding: 1rem 2rem;
-  border-radius: 4px;
-  font-size: 1.2rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-/* Estilos para el contenedor de botones */
-.button-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-}
-
-button[type="submit"] {
-  background-color: #D4A86C;
-  color: white;
-}
-
-button[type="submit"]:hover {
-  background-color: #8B6B3D;
-}
-
-/* Estilos para la selección de horas de check-in */
-.time-grid {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-button[type="button"] {
-  padding: 0.8rem 1.5rem;
-  background-color: #27ae60;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-button[type="button"]:hover {
-  background-color: #2ecc71;
-}
-
-button[type="button"].selected {
-  background-color: #8B6B3D;
-}
-
-/* Media Queries para pantallas más pequeñas */
-@media (max-width: 768px) {
-  .reservation-form-container {
-    padding: 1.5rem;
+    .current-date {
+      font-size: 14px;
+      color: #666;
+    }
   }
 
-  .reservation-form-container h2 {
-    font-size: 1.8rem;
+  .new-client-section {
+    text-align: right;
+    margin-bottom: 10px;
+
+    button {
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      font-size: 14px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+
+      &:hover {
+        background-color: #218838;
+      }
+    }
   }
 
-  button {
-    font-size: 1rem;
-    padding: 0.8rem 1.5rem;
+  .form-group {
+    margin-bottom: 15px;
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+      transition: border-color 0.3s, background-color 0.3s;
+    }
+
+    /* Validación de campos */
+    input:invalid, select:invalid {
+      border-color: red;
+      background-color: #ffe5e5;
+    }
+
+    input:valid, select:valid {
+      border-color: green;
+      background-color: #e5ffe5;
+    }
+
+    /* Deshabilitar input de Cliente */
+    input[disabled] {
+      background-color: #f0f0f0;
+      color: #555;
+    }
+  }
+
+  /* Estilos específicos para la selección de cuarto */
+  .room-selection {
+    display: flex;
+    flex-direction: column;
+
+    .room-selector {
+      display: flex;
+      align-items: center;
+
+      .view-button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 6px 10px;
+        font-size: 14px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+        margin-right: 10px;
+
+        &:hover {
+          background-color: #0056b3;
+        }
+      }
+
+      select {
+        flex: 1;
+      }
+    }
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+
+    button {
+      padding: 10px 15px;
+      font-size: 14px;
+      color: #fff;
+      background-color: #007bff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+
+      &:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+
+      &:hover:not(:disabled) {
+        background-color: #0056b3;
+      }
+    }
   }
 }

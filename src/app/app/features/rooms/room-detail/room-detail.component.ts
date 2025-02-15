@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoomService, Room } from '../../../core/services/room.service';
 import { query } from '@angular/animations';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -13,7 +14,7 @@ export class RoomDetailComponent implements OnInit {
   roomId?: number;  // Cambiado de roomType a roomId
   roomDetails: Room | null = null;
 
-  constructor(private route: ActivatedRoute, private roomService: RoomService, private router: Router) {}
+  constructor(private route: ActivatedRoute, private roomService: RoomService, private router: Router, private location: Location) {}
 
   ngOnInit(): void {
     // Obtenemos el roomId desde la URL
@@ -34,9 +35,7 @@ export class RoomDetailComponent implements OnInit {
   }
   gotoreservation(): void {
 
-    this.router.navigate(['/reservation'],{
-      queryParams: {roomId: this.roomId},
-    });
+    this.location.back();
   }
 }
 

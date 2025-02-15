@@ -42,4 +42,11 @@ export class ReservationService {
     return this.http.delete<Reservation>(`${this.apiUrl}/${reservationId}`);
   }
 
+  getReservationsByCheckInDate(checkInDate: string): Observable<Reservation[]> {
+    const formattedDate = encodeURIComponent(checkInDate);
+    console.log('Enviando fecha al servicio:', formattedDate);
+    return this.http.get<Reservation[]>(`${this.apiUrl}/by-checkin-date/${formattedDate}`);
+  }
+  
+
 }
