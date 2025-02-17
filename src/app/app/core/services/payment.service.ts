@@ -18,7 +18,7 @@ export interface Payment {
   providedIn: 'root'
 })
 export class PaymentService {
-  private apiUrl = 'http://localhost:5157/api/payment';
+  private apiUrl = 'http://www.hotelankaapi.somee.com/api/payment';
 
   constructor(private http: HttpClient) {}
 

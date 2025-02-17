@@ -19,7 +19,7 @@ export interface Reservation {
   providedIn: 'root',
 })
 export class ReservationService {
-  private apiUrl = 'http://localhost:5157/api/Reservation';
+  private apiUrl = 'http://www.hotelankaapi.somee.com/api/Reservation';
 
   constructor(private http: HttpClient) {}
 

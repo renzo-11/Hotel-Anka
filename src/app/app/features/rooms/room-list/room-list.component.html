@@ -8,8 +8,9 @@
       <div class="filter-group">
         <label for="tipo">Tipo</label>
         <select id="tipo" name="tipo" [(ngModel)]="selectedRoomType" (change)="onRoomTypeChange()">
-          <option *ngFor="let room of rooms" [value]="room.roomType">
-            {{ room.roomType }}
+          <!-- Filtrar solo los tipos específicos -->
+          <option *ngFor="let roomType of roomTypes" [value]="roomType">
+            {{ roomType }}
           </option>
         </select>
       </div>

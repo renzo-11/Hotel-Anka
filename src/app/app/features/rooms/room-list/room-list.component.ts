@@ -13,6 +13,9 @@ export class RoomListComponent implements OnInit {
   selectedRoomType: string = '';
   roomPrice: number = 0;
 
+  // Tipos específicos de habitaciones
+  roomTypes: string[] = ['Singular', 'Doble Cama', 'Matrimonial', 'Familiar'];
+
   constructor(private roomService: RoomService, private router: Router) {}
 
   ngOnInit(): void {
@@ -22,6 +25,11 @@ export class RoomListComponent implements OnInit {
   fetchRooms(): void {
     this.roomService.getRooms().subscribe((data) => {
       this.rooms = data;
+
+      // Filtrar las habitaciones solo por los tipos que nos interesan
+      this.rooms = this.rooms.filter(room => 
+        this.roomTypes.includes(room.roomType)
+      );
 
       // Si hay habitaciones, establecer el primer tipo como predeterminado
       if (this.rooms.length > 0) {

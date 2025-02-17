@@ -19,7 +19,7 @@ export interface PaymentTransaction {
   providedIn: 'root'
 })
 export class TransactionpaymentService {
-  private apiUrl = 'http://localhost:5157/api/payment-transactions';
+  private apiUrl = 'http://www.hotelankaapi.somee.com/api/payment-transactions';
 
   constructor(private http: HttpClient) {}
 
